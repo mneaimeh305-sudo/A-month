@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>For Daniel ♡</title>
+<style>
+/* Layout: one-screen card table at night. Collection tracker on top, the pack or card in the middle, a hint underneath. */
+:root{
+  --night:#120a2e; --night2:#2a0f4a; --ink:#fff6e8; --muted:#c7b8ef;
+  --sun:#ffcf3f; --pink:#ff4f9a; --mint:#3ff5c4; --sky:#4fb8ff;
+  --display:"Bungee",Impact,system-ui,sans-serif; --shade:"Bungee Shade","Bungee",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font-family:var(--body);overflow:hidden;-webkit-tap-highlight-color:transparent;
+  background:var(--night);
+  background-image:radial-gradient(60% 50% at 15% 10%,#ff4f9a55,transparent 70%),radial-gradient(55% 45% at 90% 85%,#4fb8ff55,transparent 70%),radial-gradient(80% 70% at 50% 50%,var(--night2),var(--night))}
+#sky{position:fixed;inset:0;pointer-events:none}
+.wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-inline:16px;padding-block:16px;box-sizing:border-box;gap:10px}
+.top{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.eyebrow{font-size:.7rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--shade);font-weight:400;font-size:clamp(1.5rem,7vw,2.3rem);margin:0;line-height:1;color:var(--sun);text-shadow:0 3px 0 #ff4f9a,0 6px 14px #0008;text-wrap:balance}
+.dex{display:flex;gap:10px;align-items:center;font-weight:900;font-variant-numeric:tabular-nums}
+.dex b{color:var(--sun)}
+.bar{width:min(300px,76vw);height:8px;border-radius:4px;background:#ffffff1f;overflow:hidden;box-shadow:inset 0 0 0 1px #ffffff22}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--sun),var(--mint),var(--sky));transition:width .5s}
+.stage{flex:1;display:grid;place-items:center;width:100%;min-height:0;perspective:1100px}
+.hint{color:var(--muted);font-weight:700;font-size:.9rem;text-align:center;min-height:1.4em}
+
+/* Booster pack */
+.pack{width:min(220px,56vw);max-width:100%;aspect-ratio:5/8;border:0;padding:0;cursor:pointer;border-radius:12px;position:relative;overflow:hidden;
+  color:var(--ink);transform-style:preserve-3d;transition:transform .15s;box-shadow:0 24px 50px #000a;
+  background:conic-gradient(from var(--a,0deg) at 50% 40%,#ff4f9a,#ffcf3f,#3ff5c4,#4fb8ff,#a46bff,#ff4f9a);animation:spin 6s linear infinite, bob 2.6s ease-in-out infinite}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+@keyframes bob{50%{translate:0 -8px}}
+.pack::before{content:"";position:absolute;inset:14px 10px;border-radius:8px;background:radial-gradient(circle at 50% 38%,#2a0f4a 0 34%,#120a2ee6 35%);box-shadow:inset 0 0 0 2px #ffffff55}
+.pack::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,#ffffff70 48%,transparent 60%);background-size:250% 100%;animation:sheen 2.8s linear infinite}
+@keyframes sheen{from{background-position:120% 0}to{background-position:-130% 0}}
+.zig{position:absolute;left:0;right:0;height:12px;z-index:2;background:linear-gradient(135deg,#fff8 25%,transparent 25%) 0 0/12px 12px,linear-gradient(225deg,#fff8 25%,transparent 25%) 0 0/12px 12px}
+.zig.t{top:0}.zig.b{bottom:0;transform:scaleY(-1)}
+.pin{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}
+.emb{width:42%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:2.6rem;background:radial-gradient(circle at 35% 30%,#fff,var(--sun) 40%,var(--pink));box-shadow:0 0 0 4px #120a2e,0 0 0 7px var(--sun),0 0 30px var(--pink)}
+.pname{font-family:var(--display);font-size:1.15rem;line-height:1.05;text-shadow:0 2px 0 #000}
+.psub{font-size:.68rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--sun)}
+.pack:focus-visible{outline:3px solid var(--sun);outline-offset:5px}
+.pack.tear{animation:tear .55s forwards}
+@keyframes tear{25%{transform:scale(1.07) rotate(-3deg)}50%{transform:scale(1.1) rotate(3deg)}100%{transform:scale(.4) translateY(-120px) rotate(20deg);opacity:0}}
+
+/* Cards: each element type gets its own frame colours */
+.t-fire{--f1:#ff7a2f;--f2:#ffcf3f;--fx:#fff1d6;--orb:#ff5a1f;--sym:"🔥"}
+.t-water{--f1:#2f8bff;--f2:#7fe0ff;--fx:#e3f5ff;--orb:#1c6ee8;--sym:"💧"}
+.t-heart{--f1:#ff4f9a;--f2:#ffb3d4;--fx:#ffe8f2;--orb:#e8337f;--sym:"💗"}
+.t-sky{--f1:#7a5cff;--f2:#c9b8ff;--fx:#efeaff;--orb:#5a3cf0;--sym:"🌙"}
+.t-leaf{--f1:#22c58b;--f2:#a8f0c6;--fx:#e6fbef;--orb:#14a06d;--sym:"🌿"}
+.t-bolt{--f1:#f5b800;--f2:#fff07a;--fx:#fffbe0;--orb:#e09b00;--sym:"⚡"}
+
+.card{width:min(270px,70vw);max-width:100%;aspect-ratio:63/88;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.9,.2,1.05);cursor:pointer;animation:deal .5s cubic-bezier(.2,.9,.3,1.2)}
+.card.flipped{transform:rotateY(180deg)}
+@keyframes deal{from{transform:translateY(120px) rotate(-8deg) scale(.7);opacity:0}}
+.face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 50px #000b}
+.back{background:#1b0f3d;border:9px solid #3a1f7a;box-sizing:border-box;overflow:hidden;display:grid;place-items:center}
+.back::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 50%,#ff4f9a22 0 8px,transparent 8px 18px),conic-gradient(from 0deg,#4fb8ff33,#ff4f9a33,#ffcf3f33,#4fb8ff33)}
+.back .disc{position:relative;width:46%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff,var(--sun) 35%,var(--pink) 75%);box-shadow:0 0 0 5px #1b0f3d,0 0 0 9px var(--sun),0 0 40px #ff4f9a;font-family:var(--display);font-size:1.6rem;color:#1b0f3d}
+.back .lbl{position:absolute;bottom:14px;font-family:var(--display);font-size:.8rem;letter-spacing:.1em;color:var(--sun)}
+
+.front{transform:rotateY(180deg);box-sizing:border-box;padding:9px;border:7px solid transparent;
+  background:linear-gradient(170deg,var(--f2),var(--f1)) padding-box,linear-gradient(135deg,#fff,#d9d9d9 30%,#fff 50%,#b9b9b9 70%,#fff) border-box;
+  color:#1d1530;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.row{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.stg{font-size:.55rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:#ffffffaa;border-radius:3px;padding:1px 4px;align-self:flex-start}
+.name{font-family:var(--display);font-size:1.05rem;line-height:1;text-shadow:0 1px 0 #fff8}
+.hp{display:flex;align-items:center;gap:4px;font-weight:900;font-size:.9rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hp small{font-size:.55rem}
+.orb{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;background:radial-gradient(circle at 35% 30%,#fff,var(--orb) 60%);box-shadow:0 0 0 1.5px #fff,0 1px 2px #0006}
+.art{flex:1.15;min-height:0;position:relative;border-radius:4px;display:grid;place-items:center;font-size:clamp(2.6rem,13vw,3.6rem);overflow:hidden;
+  border:4px solid;border-color:#fff #c9c9c9 #9a9a9a #e9e9e9;
+  background:radial-gradient(circle at 50% 60%,#fff 0 18%,transparent 45%),repeating-conic-gradient(from 0deg at 50% 60%,var(--f2) 0 10deg,var(--fx) 10deg 20deg)}
+.art span{filter:drop-shadow(0 4px 4px #0005);animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px) scale(1.04)}}
+.info{font-size:.55rem;font-weight:700;font-style:italic;text-align:center;background:linear-gradient(90deg,transparent,#ffffffaa,transparent);padding:1px 0}
+.move{background:var(--fx);border-radius:6px;padding:6px 8px;display:flex;flex-direction:column;gap:3px;box-shadow:inset 0 0 0 1px #0001}
+.mhead{display:flex;align-items:center;gap:6px}
+.mhead .orbs{display:flex;gap:2px}.mhead .orb{width:15px;height:15px;font-size:.5rem}
+.mname{font-weight:900;font-size:.82rem;flex:1;min-width:0}
+.dmg{font-family:var(--display);font-size:.95rem}
+.reason{font-size:.8rem;line-height:1.3;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:.52rem;text-align:center;border-top:1.5px solid #0002;padding-top:4px}
+.stats b{display:block;font-size:.5rem;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.foot{display:flex;justify-content:space-between;font-size:.55rem;font-weight:900;font-variant-numeric:tabular-nums}
+
+/* Holo rare: rainbow foil that follows the finger */
+.holo .front{background:linear-gradient(170deg,#fff3c4,#ffc8e2 40%,#c8f3ff 80%) padding-box,conic-gradient(from var(--a,0deg),#ff4f9a,#ffcf3f,#3ff5c4,#4fb8ff,#a46bff,#ff4f9a) border-box;animation:spin 4s linear infinite}
+.holo .art{background:radial-gradient(circle at 50% 60%,#fff 0 20%,transparent 50%),conic-gradient(from var(--a,0deg) at 50% 60%,#ffd1e6,#fff2b3,#c9fff0,#d6defe,#ffd1e6);animation:spin 5s linear infinite}
+.foil{position:absolute;inset:0;border-radius:8px;pointer-events:none;mix-blend-mode:color-dodge;opacity:.55;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,30%),#fff 0,transparent 35%),repeating-linear-gradient(115deg,#ff4f9a44 0 6%,#ffcf3f44 6% 12%,#3ff5c444 12% 18%,#4fb8ff44 18% 24%)}
+.holo .reason{font-size:.86rem}
+.holo .name{background:linear-gradient(90deg,#d4127a,#7a3cff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+
+.btn{font-family:var(--display);font-size:.95rem;border:0;border-radius:999px;padding:12px 22px;background:var(--sun);color:#2a0f4a;cursor:pointer;box-shadow:0 4px 0 #c4502c}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #c4502c}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.end{text-align:center;max-width:32ch;display:flex;flex-direction:column;gap:14px;align-items:center;animation:deal .5s ease-out}
+.end h2{font-family:var(--shade);font-weight:400;font-size:1.7rem;margin:0;color:var(--sun);text-shadow:0 3px 0 var(--pink);text-wrap:balance}
+.end p{margin:0;line-height:1.5;font-weight:600}
+.burst{position:fixed;pointer-events:none;font-size:1.4rem;animation:fly 1.5s ease-out forwards;z-index:9}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.6);opacity:0}}
+.flash{position:fixed;inset:0;background:#fff;pointer-events:none;animation:flash .6s forwards;z-index:8}
+@keyframes flash{from{opacity:.85}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="wrap">
+  <div class="top">
+    <div class="eyebrow">Month One · 1st Edition</div>
+    <h1>Day 47 Booster</h1>
+    <div class="dex"><span>Reasons collected <b id="count">0</b>/47</span></div>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="hint" id="hint"></div>
+</div>
+
+<script>
+const R=[
+"You asked me to be yours, and you meant it.",
+"Your good morning texts make my day start right.",
+"You fall asleep like a baby, and it's the cutest thing.",
+"You make 13,811 km feel like nothing.",
+"You listen, even to my longest voice notes.",
+"Your laugh. Enough said.",
+"You make me feel safe from the other side of the world.",
+"You remember the little things I tell you.",
+"You're patient with my time zone chaos.",
+"You make plans for us, not just for you.",
+"You're kind to everyone, not only to me.",
+"You get excited about the things you love.",
+"You make me laugh when I'm tired.",
+"You're honest with me.",
+"You make me want to be better.",
+"You send me photos of your day.",
+"You make me feel chosen.",
+"You call me just to hear my voice.",
+"You're proud of me, and you say it.",
+"You never make me feel like too much.",
+"You have the best heart.",
+"You make waiting feel worth it.",
+"You turned a normal day into my favourite one.",
+"You support my dreams.",
+"You're my favourite notification.",
+"You make me feel calm.",
+"You're funny without even trying.",
+"You're gentle with me.",
+"You show up, every single day.",
+"You make me smile at my phone like an idiot.",
+"You talk about our future.",
+"You care how my day went.",
+"You make distance feel temporary.",
+"You're my safe place.",
+"You make me feel understood.",
+"You bring out the best in me.",
+"You're the first person I want to tell everything.",
+"You make every call feel too short.",
+"You believe in us.",
+"You're handsome, obviously.",
+"You make me feel at home.",
+"You treat me like I'm rare.",
+"You make my heart race and rest at the same time.",
+"You're my person.",
+"You made these 47 days the best of my life.",
+"You're worth every one of the 13,811 kilometres."
+];
+const ART=["💌","☀️","🌙","✈️","🎧","😂","🛡️","📝","⏰","🗺️","🌷","⚡","🍩","🤍","⭐","📸","🏆","📞","🎉","🫶","❤️","⏳","🌅","🚀","🔔","🌊","🃏","🕊️","✅","📱","🔭","☕","📍","🏡","🧩","🌟","🗣️","⌛","🤞","😍","🏠","💎","💓","🫀","🗓️","🌏"];
+const MOVES=["Sweet Talk","Good Morning Beam","Instant Sleep","Distance Break","Voice Note Wave","Giggle Storm","Guardian Hug","Memory Lock","Time Zone Warp","Future Plan","Kind Heart","Spark Up","Cheer Up","Truth Shield","Level Up","Photo Flash","Chosen One","Ring Ring","Proud Roar","Soft Landing","Golden Heart","Patience Wall","Best Day Ever","Dream Boost","Ping!","Calm Tide","Laugh Attack","Gentle Touch","Daily Streak","Phone Grin","Tomorrow Beam","Check In","Pull Closer","Safe Harbour","Mind Link","Glow Up","First Call","Overtime","Faith Bond","Charm Strike","Homecoming","Rare Find","Double Beat","Bond Lock","Day 45 Special","Long Haul"];
+const TYPES=["heart","fire","water","sky","leaf","bolt"];
+const RAR=[["●","Common"],["◆","Uncommon"],["★","Rare"]];
+const cards=R.map((t,i)=>({t,a:ART[i],n:i+1,m:MOVES[i],ty:TYPES[i%6],r:RAR[i%3],d:(10+((i*37)%9)*10)}));
+cards.push({holo:true,n:47,ty:"heart",a:"👼",m:"Said Yes",r:["✦","Holo Rare"],d:"∞",
+  t:"One month ago you asked me to be your girlfriend. I said yes. Best month of my life. Happy one month, my angel Daniel. ♡ Marita"});
+const packs=[];for(let i=0;i<cards.length;i+=5)packs.push(cards.slice(i,i+5));
+let p=0,c=0,got=0;
+const stage=document.getElementById('stage'),hint=document.getElementById('hint');
+const sym=t=>({heart:"💗",fire:"🔥",water:"💧",sky:"🌙",leaf:"🌿",bolt:"⚡"})[t];
+
+/* starfield */
+const cv=document.getElementById('sky'),cx=cv.getContext('2d');let stars=[];
+function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;stars=Array.from({length:90},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.6+.3,p:Math.random()*6.28}))}
+size();addEventListener('resize',size);
+(function tw(t){cx.clearRect(0,0,cv.width,cv.height);for(const s of stars){cx.globalAlpha=.35+.65*Math.abs(Math.sin(t/900+s.p));cx.fillStyle='#fff';cx.beginPath();cx.arc(s.x,s.y,s.r*devicePixelRatio,0,6.28);cx.fill()}requestAnimationFrame(tw)})(0);
+
+function upd(){document.getElementById('count').textContent=got;document.getElementById('bar').style.width=(got/47*100)+'%'}
+function tilt(el,inner){
+  const mv=e=>{const b=el.getBoundingClientRect(),pt=e.touches?e.touches[0]:e;const x=(pt.clientX-b.left)/b.width,y=(pt.clientY-b.top)/b.height;
+    (inner||el).style.transform=(inner?'':'')+`rotateY(${(x-.5)*18}deg) rotateX(${(.5-y)*18}deg)`;
+    el.style.setProperty('--mx',x*100+'%');el.style.setProperty('--my',y*100+'%')};
+  el.addEventListener('pointermove',mv);el.addEventListener('pointerleave',()=>{(inner||el).style.transform=''});
+}
+function showPack(){
+  const last=p===packs.length-1;
+  stage.innerHTML=`<button class="pack" id="pk" aria-label="Open pack ${p+1}"><div class="zig t"></div><div class="pin">
+    <div class="psub">${last?'Final pack':'Pack '+(p+1)+' of '+packs.length}</div>
+    <div class="emb">${last?'👼':'💘'}</div>
+    <div class="pname">${last?'Holo<br>Chase Pack':'Reasons<br>Why'}</div>
+    <div class="psub">${packs[p].length} cards inside</div></div><div class="zig b"></div></button>`;
+  hint.textContent=last?'The final pack. A holo is inside…':'Tap to tear the pack open';
+  const pk=document.getElementById('pk');tilt(pk);
+  pk.onclick=()=>{pk.classList.add('tear');setTimeout(()=>{c=0;showCard()},500)};
+}
+function showCard(){
+  const k=packs[p][c],o=sym(k.ty);
+  stage.innerHTML=`<div class="card t-${k.ty} ${k.holo?'holo':''}" id="cd" tabindex="0" role="button" aria-label="Flip card">
+   <div class="face back"><div class="disc">47</div><div class="lbl">REASONS WHY</div></div>
+   <div class="face front">
+     ${k.holo?'<div class="foil"></div>':''}
+     <div class="stg">${k.holo?'Holo · Month One':'Basic · Day '+k.n}</div>
+     <div class="row"><div class="name">${k.holo?'Angel Daniel':'Daniel'}</div><div class="hp"><small>HP</small>${k.holo?'∞':47}<span class="orb">${o}</span></div></div>
+     <div class="art"><span>${k.a}</span></div>
+     <div class="info">Long-Distance Type · 13,811 km away · Reason #${k.n}</div>
+     <div class="move"><div class="mhead"><span class="orbs"><span class="orb">${o}</span>${k.holo?'<span class="orb">'+o+'</span><span class="orb">'+o+'</span>':''}</span><span class="mname">${k.m}</span><span class="dmg">${k.d}</span></div>
+       <div class="reason">${k.t}</div></div>
+     <div class="stats"><div><b>Weakness</b>Marita's voice notes</div><div><b>Resistance</b>Distance −13,811</div><div><b>Retreat</b>Never</div></div>
+     <div class="foot"><span>${k.n}/47</span><span>${k.r[0]} ${k.r[1]}</span></div>
+   </div></div>`;
+  hint.textContent=k.holo?'Tap to reveal the holo':'Tap to flip';
+  const el=document.getElementById('cd');let flipped=false;
+  const act=()=>{
+    if(!flipped){flipped=true;el.classList.add('flipped');got++;upd();
+      if(k.holo){const f=document.createElement('div');f.className='flash';document.body.appendChild(f);setTimeout(()=>f.remove(),700);burst(40);hint.textContent='Move your finger over it ✦ then tap to finish';
+        const fr=el.querySelector('.front');fr.addEventListener('pointermove',e=>{const b=fr.getBoundingClientRect();fr.style.setProperty('--mx',(e.clientX-b.left)/b.width*100+'%');fr.style.setProperty('--my',(e.clientY-b.top)/b.height*100+'%')});}
+      else{if(k.r[1]==='Rare')burst(12);hint.textContent=c<packs[p].length-1?'Tap for the next card':'Tap to open the next pack';}
+      return;}
+    c++;
+    if(c<packs[p].length)showCard();else{p++;p<packs.length?showPack():finish();}
+  };
+  el.onclick=act;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}};
+}
+function burst(n){
+  for(let i=0;i<n;i++){const s=document.createElement('span');s.className='burst';s.textContent=['♡','✦','❤','★','✧'][i%5];
+    s.style.left='50%';s.style.top='45%';s.style.color=['#ff4f9a','#ffcf3f','#3ff5c4','#4fb8ff','#fff'][i%5];
+    const a=Math.random()*6.28,d=120+Math.random()*200;s.style.setProperty('--x',Math.cos(a)*d+'px');s.style.setProperty('--y',Math.sin(a)*d+'px');s.style.setProperty('--r',(Math.random()*540)+'deg');
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1600)}
+}
+function finish(){
+  stage.innerHTML=`<div class="end"><h2>Set Complete!</h2><p>47 reasons. 47 days. 13,811 km. One month as yours, and every card in this set is one of a kind, just like you.</p><button class="btn" id="again">Open them again</button></div>`;
+  hint.textContent='';burst(40);
+  document.getElementById('again').onclick=()=>{p=0;got=0;upd();showPack()};
+}
+function intro(){
+  stage.innerHTML=`<div class="end"><div class="emb" style="width:96px;font-size:3rem;animation:bob 2.6s ease-in-out infinite">🔓</div>
+  <h2 style="font-size:clamp(2rem,10vw,2.8rem)">Level 2 Unlocked</h2>
+  <p>One month as my boyfriend. Your reward: a booster box with 47 reasons why, one for every day I've known you.</p>
+  <button class="btn" id="start">Press Start</button></div>`;
+  hint.textContent='';
+  document.getElementById('start').onclick=()=>{burst(24);showPack()};
+}
+upd();intro();
+</script>
+</body>
+</html>

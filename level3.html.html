@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>For Daniel ♡</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Courier+Prime:wght@400;700&family=Figtree:wght@600;800&display=swap">
+<style>
+/* Layout: a night-sky table; a plot-twist intro, then a long shop receipt that prints line by line. */
+html,body{background-color:#120a2e;color:#fff6e8;font-family:"Figtree",-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif}
+:root{--night:#120a2e;--ink:#fff6e8;--muted:#c7b8ef;--sun:#ffcf3f;--pink:#ff4f9a;--paper:#fffdf6;--print:#2a2233;
+  --mono:"Courier Prime","Courier New",Courier,monospace;--shade:"Bungee Shade",Impact,"Arial Black",sans-serif;color-scheme:dark}
+body{margin:0;min-height:100%;background-image:radial-gradient(60% 50% at 85% 8%,rgba(255,79,154,.33),transparent 70%),radial-gradient(55% 45% at 10% 90%,rgba(79,184,255,.33),transparent 70%);background-attachment:fixed}
+.wrap{max-width:420px;margin:0 auto;padding:24px 16px 60px;box-sizing:border-box}
+#intro{min-height:85vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.line{font-weight:800;font-size:1.25rem;line-height:1.4;margin:0 0 18px;opacity:0;transform:translateY(12px);transition:opacity .7s,transform .7s}
+.line.show{opacity:1;transform:none}
+.twist{font-family:var(--shade);font-weight:400;font-size:2.4rem;color:var(--sun);text-shadow:0 3px 0 var(--pink)}
+.btn{font-family:"Figtree",sans-serif;font-weight:800;font-size:1.05rem;border:0;border-radius:999px;padding:14px 26px;background:#ffcf3f;color:#2a0f4a;cursor:pointer;box-shadow:0 5px 0 #c4502c;margin-top:10px;opacity:0;transition:opacity .7s}
+.btn.show{opacity:1}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #c4502c}
+
+/* Printer + receipt */
+#shop{display:none}
+.printer{height:34px;border-radius:12px 12px 6px 6px;background:linear-gradient(#3a2a5c,#24183d);box-shadow:0 10px 24px rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.15);position:relative;z-index:2}
+.printer:after{content:"";position:absolute;left:8%;right:8%;bottom:6px;height:6px;border-radius:3px;background:#0c0620}
+.paper{position:relative;margin:-10px 6% 0;background:var(--paper);color:var(--print);font-family:var(--mono);font-size:.92rem;padding:28px 18px 34px;box-shadow:0 18px 40px rgba(0,0,0,.55)}
+.paper:after{content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;background:linear-gradient(-45deg,transparent 33%,var(--paper) 33%) 0 0/16px 12px,linear-gradient(45deg,transparent 33%,var(--paper) 33%) 0 0/16px 12px}
+.c{text-align:center}
+.shop{font-weight:700;font-size:1.25rem;letter-spacing:.06em}
+.sm{font-size:.78rem;opacity:.75}
+.dash{border:0;border-top:2px dashed rgba(42,34,51,.45);margin:14px 0}
+.item{display:flex;align-items:baseline;margin:0 0 7px;animation:print .35s ease-out}
+.item .n{width:2.3em;flex:none;opacity:.6}
+.item .t{flex:1;min-width:0}
+.item .p{flex:none;padding-left:8px;font-weight:700;color:#d4127a}
+@keyframes print{from{opacity:0;transform:translateY(-6px)}}
+.tot{display:flex;justify-content:space-between;margin:0 0 6px}
+.big{font-weight:700;font-size:1.15rem}
+.stamp{display:inline-block;margin:16px auto 6px;border:3px solid #d4127a;color:#d4127a;font-weight:700;font-size:1.1rem;padding:4px 12px;transform:rotate(-8deg);letter-spacing:.1em;border-radius:6px}
+.barcode{height:54px;margin:16px 0 6px;background:repeating-linear-gradient(90deg,#2a2233 0 2px,transparent 2px 4px,#2a2233 4px 7px,transparent 7px 9px,#2a2233 9px 10px,transparent 10px 13px)}
+#end{display:none}
+.again{display:block;margin:34px auto 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="intro">
+    <p class="line">You thought those 47 reasons were about you…</p>
+    <p class="line">They were mostly about how you make <b>me</b> feel.</p>
+    <p class="line twist">Plot twist.</p>
+    <p class="line">This one is all about <b>you</b>.<br>Because you are…</p>
+    <button class="btn" id="go">Print my receipt 🧾</button>
+  </div>
+
+  <div id="shop">
+    <div class="printer"></div>
+    <div class="paper" id="paper">
+      <div class="c shop">THE DANIEL STORE ♡</div>
+      <div class="c sm">Est. 13 Sept · Ships 13,811 km</div>
+      <div class="c sm">Customer: Marita · Order #050</div>
+      <hr class="dash">
+      <div class="c sm" style="margin-bottom:10px">50 REASONS · BECAUSE YOU ARE…</div>
+      <div id="items"></div>
+      <div id="end">
+        <hr class="dash">
+        <div class="tot"><span>SUBTOTAL</span><span>50 reasons</span></div>
+        <div class="tot"><span>TAX</span><span>0 (love is tax-free)</span></div>
+        <div class="tot"><span>DISCOUNT</span><span>none, you're worth full price</span></div>
+        <hr class="dash">
+        <div class="tot big"><span>TOTAL</span><span>1 Daniel</span></div>
+        <div class="tot"><span>PAID WITH</span><span>my whole heart</span></div>
+        <div class="c"><span class="stamp">PRICELESS</span></div>
+        <hr class="dash">
+        <div class="c sm">No refunds. No returns.<br>Keeping you forever.</div>
+        <div class="barcode"></div>
+        <div class="c sm">Thank you, come again ♡<br>— Marita</div>
+      </div>
+    </div>
+    <button class="btn show again" id="again" style="display:none">Print it again</button>
+  </div>
+</div>
+
+<script>
+var R=[
+"Kind","Funny without even trying","Patient with me","Honest","Gentle","Brave enough to ask me out",
+"Smart","Hardworking","Handsome, obviously","A great listener","Loyal","Calm when I'm not",
+"Thoughtful","Generous","Humble","Respectful","Caring to everyone around you","Passionate about what you love",
+"Supportive","Mature","Playful","So easy to talk to","Warm","Protective",
+"Trustworthy","Curious","Romantic in your own way","Good at making plans","Optimistic","Forgiving",
+"Consistent, every single day","Sweet in the mornings","Adorable when you fall asleep in 2 seconds","Competitive (tennis 😤)","Someone with great taste in songs 👀","Great with people",
+"Strong","Soft-hearted","Real, never fake","Dedicated","Grounded","Inspiring",
+"Fun, even through a screen","Committed to us","Worth every kilometre","My favourite person to annoy","An angel, literally 👼","Mine",
+"The best thing that happened to me this year","You. Just you."
+];
+var P=["♡","♡♡","∞","★","♡","∞"];
+function $(id){return document.getElementById(id)}
+var lines=document.querySelectorAll('#intro .line');
+for(var k=0;k<lines.length;k++){(function(el,d){setTimeout(function(){el.className+=' show'},d)})(lines[k],600+k*1300)}
+setTimeout(function(){$('go').className+=' show'},600+lines.length*1300);
+
+var timer=null;
+function print(){
+  $('intro').style.display='none';$('shop').style.display='block';
+  $('items').innerHTML='';$('end').style.display='none';$('again').style.display='none';
+  window.scrollTo(0,0);var i=0;
+  timer=setInterval(function(){
+    if(i>=R.length){clearInterval(timer);$('end').style.display='block';$('again').style.display='block';
+      setTimeout(function(){$('end').scrollIntoView({behavior:'smooth',block:'start'})},100);return}
+    var d=document.createElement('div');d.className='item';
+    var n=(i+1<10?'0':'')+(i+1);
+    d.innerHTML='<span class="n">'+n+'</span><span class="t">'+R[i]+'</span><span class="p">'+(i===R.length-1?'∞∞∞':P[i%P.length])+'</span>';
+    $('items').appendChild(d);
+    var b=d.getBoundingClientRect();if(b.bottom>window.innerHeight-40)window.scrollBy(0,b.height+7);
+    i++;
+  },420);
+}
+$('go').onclick=print;$('again').onclick=print;
+</script>
+</body>
+</html>
